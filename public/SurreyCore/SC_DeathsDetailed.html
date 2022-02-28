@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>
+            Dash:PHIIT
+        </title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.js"></script>    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+        <link rel="stylesheet" type="text/css" href= "../styles.css" />
+    </head>
+    <body>
+        <header>
+            <h1 class = "logo">Dash:PHIIT</h1>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">  
+            <nav>
+                <ul>
+                    <li> <a href="../index.html">Intro</a></li>
+                    <details>
+                        <summary>Surrey Core</summary>
+                        <li><a class="subMenu" href="./SC_Summary.html">Daily summary</a></li>
+                        <li><a class="subMenu" href="./SC_VaccinesDetailed.html">Vaccines</a></li>
+                        <li><a class="subMenu" href="./SC_CasesDetailed.html">Case rates</a></li>
+                        <li><a class="subMenu" href="./SC_DeathsDetailed.html">Deaths</a></li>
+                        <li><a class="subMenu" href="./SC_HospDetailed.html">Hospitalisations</a></li>
+                        <li><a class="subMenu" href="./SC_VentiDetailed.html">Ventilators</a></li>
+                    </details>
+                    <li> <a href="../comparisons.html">LTLA Comparisons</a></li>
+                </ul>
+            </nav>
+            <label for="nav-toggle" class="nav-toggle-label">
+                <span></span>
+            </label>
+        </header>
+        <!-- Tab links -->
+        <div class="tab">
+            <button class="tablinks" onclick="clearDiv(divID = 'elmPlot_div', canvasID = 'elm_plot'); openTab(event, 'Elmbridge'); plot_deaths(ltla_name = 'Elmbridge', ID = 'elm')" id="defaultOpen">Elmbridge</button>
+            <button class="tablinks" onclick="clearDiv(divID = 'EnEPlot_div', canvasID = 'EnE_plot'); openTab(event, 'Epsom and Ewell'); plot_deaths(ltla_name = 'Epsom and Ewell', ID = 'EnE')">Epsom and Ewell</button>
+            <button class="tablinks" onclick="clearDiv(divID = 'gilPlot_div', canvasID = 'gil_plot'); openTab(event, 'Guildford'); plot_deaths(ltla_name = 'Guildford', ID = 'gil')">Guildford</button>
+            <button class="tablinks" onclick="clearDiv(divID = 'MVPlot_div', canvasID = 'MV_plot'); openTab(event, 'Mole Valley'); plot_deaths(ltla_name = 'Mole Valley' ,ID = 'MV');">Mole Valley</button>
+            <button class="tablinks" onclick="clearDiv(divID = 'RnBPlot_div', canvasID = 'RnB_plot'); openTab(event, 'Reigate & Banstead'); plot_deaths(ltla_name = 'Reigate and Banstead', ID = 'RnB')">Reigate & Banstead</button>
+            <button class="tablinks" onclick="clearDiv(divID = 'RunnyPlot_div', canvasID = 'Runny_plot'); openTab(event, 'Runnymede'); plot_deaths(ltla_name = 'Runnymede', ID = 'Runny')">Runnymede</button>
+            <button class="tablinks" onclick="clearDiv(divID = 'spelPlot_div', canvasID = 'spel_plot'); openTab(event, 'Spelthorne'); plot_deaths(ltla_name = 'Spelthorne', ID = 'spel')">Spelthorne</button>
+            <button class="tablinks" onclick="clearDiv(divID = 'SuHePlot_div', canvasID = 'SuHe_plot'); openTab(event, 'Surrey Heath'); plot_deaths(ltla_name = 'Surrey Heath', ID = 'SuHe')">Surrey Heath</button>
+            <button class="tablinks" onclick="clearDiv(divID = 'tandrPlot_div', canvasID = 'tandr_plot'); openTab(event, 'Tandridge'); plot_deaths(ltla_name = 'Tandridge', ID = 'tandr')">Tandridge</button>
+            <button class="tablinks" onclick="clearDiv(divID = 'wavPlot_div', canvasID = 'wav_plot'); openTab(event, 'Waverley'); plot_deaths(ltla_name = 'Waverley', ID = 'wav')">Waverley</button>
+            <button class="tablinks" onclick="clearDiv(divID = 'wokPlot_div', canvasID = 'wok_plot'); openTab(event, 'Woking'); plot_deaths(ltla_name = 'Woking', ID = 'wok')">Woking</button>
+        </div>
+        <div id="Elmbridge" class="tabcontent">
+            <div class="deaths_title">
+                <h2>Elmbridge</h2>
+            </div>
+            <div class="trust_stats">
+                <div>
+                    <h2>Cumulative deaths, 28 days after positive test</h2>
+                    <h3 id="getelm_updatedate"></h3>
+                    <h2>Most recent new deaths:</h2>
+                    <h2 id="elm_dailydeaths"></h2>
+                    <h2>Seven day sum:</h2>
+                    <h2 id= "Insert_elm_weeklysum"></h2>
+                    <h3 id="Insert_elm_Week_Duration"></h3>   
+                    <h2>Cumulative deaths:</h2>
+                    <h2 id="Insert_elm_Total"></h2>   
+                </div>
+                <div id="elmPlot_div">
+                    <canvas class="all_plots" id="elm_plot"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div id="Epsom and Ewell" class="tabcontent">
+            <div class="deaths_title">
+                <h2>Epsom and Ewell</h2>
+            </div>
+            <div class="trust_stats">
+                <div>
+                    <h2>Latest known cumulative fatalities:</h2>
+                    <h3 id="getEnE_updatedate"></h3>
+                    <h2>Most recent new fatalities:</h2>
+                    <h2 id="EnE_dailydeaths"></h2>
+                    <h2>Seven day sum:</h2>
+                    <h2 id= "Insert_EnE_weeklysum"></h2>
+                    <h3 id="Insert_EnE_Week_Duration"></h3>   
+                    <h2>Cumulative fatalities:</h2>
+                    <h2 id="Insert_EnE_Total"></h2>        
+                </div>
+                <div id="EnEPlot_div">
+                    <canvas class="all_plots" id="EnE_plot"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div id="Guildford" class="tabcontent">
+            <div class="deaths_title">
+                <h2>Guildford</h2>
+            </div>
+            <div class="trust_stats">
+                <div>
+                    <h2>Latest known cumulative fatalities:</h2>
+                    <h3 id="getgil_updatedate"></h3>
+                    <h2>Most recent new fatalities:</h2>
+                    <h2 id="gil_dailydeaths"></h2>
+                    <h2>Seven day sum:</h2>
+                    <h2 id= "Insert_gil_weeklysum"></h2>
+                    <h3 id="Insert_gil_Week_Duration"></h3>   
+                    <h2>Cumulative fatalities:</h2>
+                    <h2 id="Insert_gil_Total"></h2>   
+                </div>
+                <div id="gilPlot_div">
+                    <canvas class="all_plots" id="gil_plot"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="Mole Valley" class="tabcontent">
+            <div class="deaths_title">
+                <h2>Mole Valley</h2>
+            </div>
+            <div class="trust_stats">
+                <div>
+                    <h2>Latest known cumulative fatalities:</h2>
+                    <h3 id="getMV_updatedate"></h3>
+                    <h2>Most recent new fatalities:</h2>
+                    <h2 id="MV_dailydeaths"></h2>
+                    <h2>Seven day sum:</h2>
+                    <h2 id= "Insert_MV_weeklysum"></h2>
+                    <h3 id="Insert_MV_Week_Duration"></h3>   
+                    <h2>Cumulative fatalities:</h2>
+                    <h2 id="Insert_MV_Total"></h2>    
+                </div>
+                <div id="MVPlot_div"> 
+                    <canvas class="all_plots" id="MV_plot"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div id="Reigate & Banstead" class="tabcontent">
+            <div class="deaths_title">
+                <h2>Reigate & Banstead</h2>
+            </div>
+            <div class="trust_stats">
+                <div>
+                    <h2>Latest known cumulative fatalities:</h2>
+                    <h3 id="getRnB_updatedate"></h3>
+                    <h2>Most recent new fatalities:</h2>
+                    <h2 id="RnB_dailydeaths"></h2>
+                    <h2>Seven day sum:</h2>
+                    <h2 id= "Insert_RnB_weeklysum"></h2>
+                    <h3 id="Insert_RnB_Week_Duration"></h3>   
+                    <h2>Cumulative fatalities:</h2>
+                    <h2 id="Insert_RnB_Total"></h2>   
+                </div>
+                <div id="RnBPlot_div">
+                    <canvas class="all_plots" id="RnB_plot"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="Runnymede" class="tabcontent">
+            <div class="deaths_title">
+                <h2>Runnymede</h2>
+            </div>
+            <div class="trust_stats">
+                <div>
+                    <h2>Latest known cumulative fatalities:</h2>
+                    <h3 id="getRunny_updatedate"></h3>
+                    <h2>Most recent new fatalities:</h2>
+                    <h2 id="Runny_dailydeaths"></h2>
+                    <h2>Seven day sum:</h2>
+                    <h2 id= "Insert_Runny_weeklysum"></h2>
+                    <h3 id="Insert_Runny_Week_Duration"></h3>   
+                    <h2>Cumulative fatalities:</h2>
+                    <h2 id="Insert_Runny_Total"></h2>     
+                </div>
+                <div id="RunnyPlot_div">
+                    <canvas class="all_plots" id="Runny_plot"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="Spelthorne" class="tabcontent">
+            <div class="deaths_title">
+                <h2>Spelthorne</h2>
+            </div>
+            <div class="trust_stats">
+                <div>
+                    <h2>Latest known cumulative fatalities:</h2>
+                    <h3 id="getspel_updatedate"></h3>
+                    <h2>Most recent new fatalities:</h2>
+                    <h2 id="spel_dailydeaths"></h2>
+                    <h2>Seven day sum:</h2>
+                    <h2 id= "Insert_spel_weeklysum"></h2>
+                    <h3 id="Insert_spel_Week_Duration"></h3>   
+                    <h2>Cumulative fatalities:</h2>
+                    <h2 id="Insert_spel_Total"></h2>      
+                </div>
+                <div id="spelPlot_div">
+                    <canvas class="all_plots" id="spel_plot"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="Surrey Heath" class="tabcontent">
+            <div class="deaths_title">
+                <h2>Surrey Heath</h2>
+            </div>
+            <div class="trust_stats">
+                <div>
+                    <h2>Latest known cumulative fatalities:</h2>
+                    <h3 id="getSuHe_updatedate"></h3>
+                    <h2>Most recent new fatalities:</h2>
+                    <h2 id="SuHe_dailydeaths"></h2>
+                    <h2>Seven day sum:</h2>
+                    <h2 id= "Insert_SuHe_weeklysum"></h2>
+                    <h3 id="Insert_SuHe_Week_Duration"></h3>   
+                    <h2>Cumulative fatalities:</h2>
+                    <h2 id="Insert_SuHe_Total"></h2>         
+                </div>
+                <div id="SuHePlot_div">
+                    <canvas class="all_plots" id="SuHe_plot"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="Tandridge" class="tabcontent">
+            <div class="deaths_title">
+                <h2>Tandridge</h2>
+            </div>
+            <div class="trust_stats">
+                <div>
+                    <h2>Latest known cumulative fatalities:</h2>
+                    <h3 id="gettandr_updatedate"></h3>
+                    <h2>Most recent new fatalities:</h2>
+                    <h2 id="tandr_dailydeaths"></h2>
+                    <h2>Seven day sum:</h2>
+                    <h2 id= "Insert_tandr_weeklysum"></h2>
+                    <h3 id="Insert_tandr_Week_Duration"></h3>   
+                    <h2>Cumulative fatalities:</h2>
+                    <h2 id="Insert_tandr_Total"></h2>      
+                </div>
+                <div id="tandrPlot_div">
+                    <canvas class="all_plots" id="tandr_plot"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="Waverley" class="tabcontent">
+            <div class="deaths_title">
+                <h2>Waverley</h2>
+            </div>
+            <div class="trust_stats">
+                <div>
+                    <h2>Latest known cumulative fatalities:</h2>
+                    <h3 id="getwav_updatedate"></h3>
+                    <h2>Most recent new fatalities:</h2>
+                    <h2 id="wav_dailydeaths"></h2>
+                    <h2>Seven day sum:</h2>
+                    <h2 id= "Insert_wav_weeklysum"></h2>
+                    <h3 id="Insert_wav_Week_Duration"></h3>   
+                    <h2>Cumulative fatalities:</h2>
+                    <h2 id="Insert_wav_Total"></h2>   
+                </div>
+                <div id="wavPlot_div">
+                    <canvas class="all_plots" id="wav_plot"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="Woking" class="tabcontent">
+            <div class="deaths_title">
+                <h2>Woking</h2>
+            </div>
+            <div class="trust_stats">
+                <div>
+                    <h2>Latest known cumulative fatalities:</h2>
+                    <h3 id="getwok_updatedate"></h3>
+                    <h2>Most recent new fatalities:</h2>
+                    <h2 id="wok_dailydeaths"></h2>
+                    <h2>Seven day sum:</h2>
+                    <h2 id= "Insert_wok_weeklysum"></h2>
+                    <h3 id="Insert_wok_Week_Duration"></h3>   
+                    <h2>Cumulative fatalities:</h2>
+                    <h2 id="Insert_wok_Total"></h2>    
+                </div>
+                <div id="wokPlot_div">
+                    <canvas class="all_plots" id="wok_plot"></canvas>
+                </div>
+            </div>
+        </div>
+    </body>
+    <footer>
+        <script src="../externalLib/htmlFunctions.js"></script>
+    </footer>
+</html>

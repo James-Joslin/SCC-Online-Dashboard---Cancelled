@@ -1,0 +1,469 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:300,600');
+
+html {
+    overflow-y: scroll;
+  }
+
+:root {
+    --nav-text: #dddddd;
+    --nav-secondColour: #e6e6e6b4;
+    --body-background: #ffffff;
+    --text-colour: #000000;
+    --text-2ndColour: #4e4e4e;
+    /* Background for header */
+    --background: linear-gradient(90deg, rgba(38, 141, 132, 1) 85%, var(--nav-secondColour) 60%);
+}
+
+.footer {
+    background: var(--background);
+    width: 100%;
+    position: absolute;
+}
+
+.button {
+    display: inline-flex;
+    font-size: 1.5em;
+    margin: 00.5em;
+    height: 2em;
+    font-weight: bold;
+    background: rgba(38, 141, 132, 1);
+    text-decoration: none;
+    border-radius: 4px;
+    border: 5px solid rgba(38, 141, 132, 0.85);
+    color: var(--nav-text);
+    text-align: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.button:hover {
+    background: rgba(11, 86, 92);
+    border: 5px solid rgba(11, 86, 92);
+}
+
+.button__text {
+    display: inline-flex;
+    padding-left: 30;
+}
+
+.all_plots {
+    width:100% !important;
+	height:100% !important;
+} 
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--body-background);
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+}
+
+/* Grid section for intro page */
+.intro {
+    background-color: var(--body-background);
+    background-blend-mode: multiply;
+    background-size: cover;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    color: var(--text-colour);
+    align-items: start;
+    margin-left: 1em;
+    font-size: 0.65em;
+    margin-right: 1em;
+}
+/* End of intro page grid *
+
+/* Vac Content Detailed */
+.VacContent_tabInsert {
+    /* padding: 0.25em; */
+    /* border-radius: 1em; */
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+}
+@media only screen and (max-width: 768px) {
+    .VacContent_tabInsert {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+}
+.VacContent_tab {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    font-size: 0.65em;
+    /* padding: 0.25em; */
+    /* background-color: var(--nav-secondColour); */
+    /* border-radius: 1em; */
+    border-top: none;
+    animation: fadeEffect 1s; /* Fading effect takes 1 second */
+}
+
+@media only screen and (max-width: 868px) {
+    .VacContent_tab {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+}
+/* Vac Content detailed end */
+
+/* Rates detailed page */
+.selectMSOA {
+    display: inline;
+}
+
+.rates_stats{
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+}
+
+@media only screen and (max-width: 768px) {
+    .rates_stats {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+}
+
+.rates_title-child {
+    display: inline-block;
+}
+/* Rates detailed page end */
+
+/* Grid section for Surrey Core page */
+.SurreyCore_Wrapper {
+    display: grid;
+    grid-template-areas: "A A A A"
+                        "B B C C"
+                        "D D E E";
+    font-size: 0.65em;
+    grid-gap: 0.5em;
+}
+@media only screen and (max-width: 768px) {
+    .SurreyCore_Wrapper {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-areas: "A"
+                        "B"
+                        "C"
+                        "D"
+                        "E";
+    }
+}
+
+.VacContent {
+    grid-area: A;
+    background-color: var(--nav-secondColour);
+    padding: 0.25em;
+    border-radius: 1em;
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+}
+@media only screen and (max-width: 768px) {
+    .VacContent {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+}
+
+.VacTitle {
+    padding: 0.25em;
+    grid-template-columns: 1fr 1fr;
+}
+
+.Vac_Numerics {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+
+.CaseContent {
+    grid-area: B;
+    padding: 0.25em;
+    background-color: var(--nav-secondColour);
+    border-radius: 1em;
+}
+
+.DeathContent {
+    grid-area: C;
+    padding: 0.25em;
+    background-color: var(--nav-secondColour);
+    border-radius: 1em;
+}
+
+.HospContent {
+    grid-area: D;
+    padding: 0.25em;
+    background-color: var(--nav-secondColour);
+    border-radius: 1em;
+}
+
+.VentContent {
+    grid-area: E;
+    padding: 0.25em;
+    background-color: var(--nav-secondColour);
+    border-radius: 1em;
+}
+/* End of surrey core page grid */
+/* Hospitals and Ventis detailed */
+
+/* Go from zero to full opacity */
+    @keyframes fadeEffect {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+.trust_stats{
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+}
+
+@media only screen and (max-width: 768px) {
+    .trust_stats {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+}
+/* Hospitals and venti detailed end */
+/* LTLA Comparisons Page */
+.Comparisons_Content {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    font-size: 0.65em;
+    grid-gap: 0.5em;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+@media only screen and (max-width: 1005px) {
+    .Comparisons_Content {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+}
+.DateSelector {
+    margin-left: 1em;
+}
+
+.surreyTable{
+    margin-left: 0em;
+    width: 100%;
+    border: 1px solid var(--nav-secondColour);
+    padding: 0.25em;
+    font-family: 'Lato', sans-serif;
+    font-size: 1.35em;
+    text-align: left;
+    border-collapse: collapse;
+}
+
+.surreyTable th {
+    border-bottom:solid 1px var(--nav-secondColour);
+    border-left: solid 1px var(--nav-secondColour);
+}
+
+.surreyTable td {
+    border-left: solid 1px var(--nav-secondColour);
+    padding-top: 0.125em;
+    padding-bottom: 0.125em;
+}
+
+tr:hover {background-color:var(--nav-secondColour);}
+/* Comparisons page ends */
+
+img {
+    border-radius: 30px;
+} 
+
+h2 {
+    color: var(--text-2ndColour);
+}
+h3 {
+    color: var(--text-2ndColour);
+}
+
+/* navigation menu styles start here */
+
+header {
+    background: var(--background);
+    text-align: left;
+    padding-left: 4em;
+    position: relative;
+    z-index: 999;
+    /* width: 100%; */
+    color: var(--nav-secondColour);
+}
+
+.subMenu {
+    font-size: 0.8rem;
+    margin-left: 1em;
+}
+
+.nav-toggle {
+    display: none;
+}
+
+.nav-toggle-label:hover {
+    cursor: pointer;
+}
+
+.nav-toggle-label ~ .nav-toggle-label {
+    outline: 3px solid rgba(lightblue, .75);
+  }
+
+.nav-toggle-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-left: 1em;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.nav-toggle-label span,
+.nav-toggle-label span::before,
+.nav-toggle-label span::after {
+    display: block;
+    background: var(--nav-text);
+    height: 2px;
+    width: 2em;
+    border-radius: 2px;
+    position: relative;
+}
+
+.nav-toggle-label span::before,
+.nav-toggle-label span::after {
+    content: '';
+    position: absolute;
+}
+
+.nav-toggle-label span::before {
+    bottom: 7px;
+}
+  
+.nav-toggle-label span::after {
+    top: 7px;
+}
+
+nav {
+    position: absolute;
+    text-align: left;
+    top: 100%;
+    left: 0;
+    background: var(--background);
+    width: 100%;
+    transform: scale(1, 0);
+    transform-origin: top;
+    transition: transform 400ms ease-in-out;
+}
+
+nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+nav li {
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+    margin-left: 1em;
+}
+
+nav summary {
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+    margin-left: 1em;
+}
+
+nav a {
+    color: var(--nav-text);
+    text-decoration: none;
+    font-size: 1rem;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 150ms ease-in-out;
+}
+
+nav a:hover {
+    color: var(--text-colour);
+    cursor: pointer;
+}
+
+nav summary {
+    color: var(--nav-text);
+    text-decoration: none;
+    font-size: 1rem;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 150ms ease-in-out;
+}
+
+nav summary:hover {
+    color: var(--text-colour);
+    cursor: pointer;
+}
+
+.nav-toggle:checked ~ nav {
+    transform: scale(1,1);
+}
+
+.nav-toggle:checked ~ nav a {
+    opacity: 1;
+    transition: opacity 250ms ease-in-out 250ms;
+}
+
+.nav-toggle:checked ~ nav summary {
+    opacity: 1;
+    transition: opacity 250ms ease-in-out 250ms;
+}
+/* Nav styling ends */
+/* Tabs for detailed pages */
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: var(--body-background);
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 0.75em;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: var(--nav-secondColour);
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+    background-color: rgba(38, 141, 132, 0.75);
+    color: var(--nav-text);
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    font-size: 0.65em;
+    /* padding: 0.25em; */
+    /* background-color: var(--nav-secondColour); */
+    /* border-radius: 1em; */
+    border-top: none;
+    animation: fadeEffect 1s; /* Fading effect takes 1 second */
+}
+
+@media only screen and (max-width: 868px) {
+    .tabcontent {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+}

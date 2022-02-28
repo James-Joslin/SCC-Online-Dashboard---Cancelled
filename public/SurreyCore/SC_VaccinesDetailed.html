@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>
+            Dash:PHIIT
+        </title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.js"></script>    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+        <link rel="stylesheet" type="text/css" href= "../styles.css" />
+    </head>
+    <body>
+        <header>
+            <h1 class = "logo">Dash:PHIIT</h1>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">  
+            <nav>
+                <ul>
+                    <li> <a href="../index.html">Intro</a></li>
+                    <details>
+                        <summary>Surrey Core</summary>
+                        <li><a class="subMenu" href="./SC_Summary.html">Daily summary</a></li>
+                        <li><a class="subMenu" href="./SC_VaccinesDetailed.html">Vaccines</a></li>
+                        <li><a class="subMenu" href="./SC_CasesDetailed.html">Case rates</a></li>
+                        <li><a class="subMenu" href="./SC_DeathsDetailed.html">Deaths</a></li>
+                        <li><a class="subMenu" href="./SC_HospDetailed.html">Hospitalisations</a></li>
+                        <li><a class="subMenu" href="./SC_VentiDetailed.html">Ventilators</a></li>
+                    </details>
+                    <li> <a href="../comparisons.html">LTLA Comparisons</a></li>
+                </ul>
+            </nav>
+            <label for="nav-toggle" class="nav-toggle-label">
+                <span></span>
+            </label>
+        </header>
+        <div class="tab" id="tab">
+            <button class="tablinks" onclick="clearDiv(divID = 'elmPlot_div', canvasID = 'elm_plot'); openTab(event, 'Elmbridge'); plotVac(ltlaName = 'Elmbridge', partial_ID = 'elm')" id="defaultOpen">Elmbridge</button>
+            <button class="tablinks" onclick="clearDiv(divID = 'EnEPlot_div', canvasID = 'EnE_plot'); openTab(event, 'Epsom and Ewell'); plotVac(ltlaName = 'Epsom and Ewell', partial_ID = 'EnE')">Epsom and Ewell</button>
+            <button class="tablinks" onclick="clearDiv(divID = 'gilPlot_div', canvasID = 'gil_plot'); openTab(event, 'Guildford'); plotVac(ltlaName = 'Guildford', partial_ID = 'gil')">Guildford</button>
+            <button class="tablinks" onclick="clearDiv(divID = 'mvPlot_div', canvasID = 'mv_plot'); openTab(event, 'Mole Valley'); plotVac(ltlaName = 'Mole Valley', partial_ID = 'mv')">Mole Valley</button>
+            <button class="tablinks" onclick="clearDiv(divID = 'RnBPlot_div', canvasID = 'RnB_plot'); openTab(event, 'Reigate & Banstead'); plotVac(ltlaName = 'Reigate and Banstead', partial_ID = 'RnB')">Reigate & Banstead</button>
+            <button class="tablinks" onclick="clearDiv(divID = 'runnyPlot_div', canvasID = 'runny_plot'); openTab(event, 'Runnymede'); plotVac(ltlaName = 'Runnymede', partial_ID = 'runny')">Runnymede</button>
+            <button class="tablinks" onclick="clearDiv(divID = 'spelPlot_div', canvasID = 'spel_plot'); openTab(event, 'Spelthorne'); plotVac(ltlaName = 'Spelthorne', partial_ID = 'spel')">Spelthorne</button>
+            <button class="tablinks" onclick="clearDiv(divID = 'SuHePlot_div', canvasID = 'SuHe_plot'); openTab(event, 'Surrey Heath'); plotVac(ltlaName = 'Surrey Heath', partial_ID = 'SuHe')">Surrey Heath</button>
+            <button class="tablinks" onclick="clearDiv(divID = 'tandrPlot_div', canvasID = 'tandr_plot'); openTab(event, 'Tandridge'); plotVac(ltlaName = 'Tandridge', partial_ID = 'tandr')">Tandridge</button>
+            <button class="tablinks" onclick="clearDiv(divID = 'wavPlot_div', canvasID = 'wav_plot'); openTab(event, 'Waverley'); plotVac(ltlaName = 'Waverley', partial_ID = 'wav')">Waverley</button>
+            <button class="tablinks" onclick="clearDiv(divID = 'wokPlot_div', canvasID = 'wok_plot'); openTab(event, 'Woking'); plotVac(ltlaName = 'Woking', partial_ID = 'wok')">Woking</button>
+        </div>
+        <div class="tabcontent" id="Elmbridge">
+            <div class="VacContent_tabInsert">
+                <div>
+                    <h2>Elmbridge</h2>
+                    <h3>Latest Vaccinations</h3>
+                    <h1>People Vaccinated</h1>
+                    <h3 id="elm_VacUpdateDate"></h3>
+                    <div class="Vac_Numerics">
+                        <div>
+                            <h2>First dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="elm_DailyFirst"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="elm_VacCumuFirst"></h1> 
+                        </div>
+                        <div>
+                            <h2>Second dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="elm_DailySecond"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="elm_VacCumuSecond"></h1> 
+                        </div>
+                        <div>
+                            <h2>Third dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="elm_DailyThird"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="elm_VacCumuThird"></h1> 
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div id="elmPlot_div">
+                        <canvas class="all_plots" id="elm_plot"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tabcontent" id="Epsom and Ewell">
+            <div class="VacContent_tabInsert">
+                <div>
+                    <h2>Epsom and Ewell</h2>
+                    <h3>Latest Vaccinations</h3>
+                    <h1>People Vaccinated</h1>
+                    <h3 id="EnE_VacUpdateDate"></h3>
+                    <div class="Vac_Numerics">
+                        <div>
+                            <h2>First dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="EnE_DailyFirst"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="EnE_VacCumuFirst"></h1> 
+                        </div>
+                        <div>
+                            <h2>Second dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="EnE_DailySecond"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="EnE_VacCumuSecond"></h1> 
+                        </div>
+                        <div>
+                            <h2>Third dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="EnE_DailyThird"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="EnE_VacCumuThird"></h1> 
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div id="EnEPlot_div">
+                        <canvas class="all_plots" id="EnE_plot"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tabcontent" id="Guildford">
+            <div class="VacContent_tabInsert">
+                <div>
+                    <h2>Guildford</h2>
+                    <h3>Latest Vaccinations</h3>
+                    <h1>People Vaccinated</h1>
+                    <h3 id="gil_VacUpdateDate"></h3>
+                    <div class="Vac_Numerics">
+                        <div>
+                            <h2>First dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="gil_DailyFirst"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="gil_VacCumuFirst"></h1> 
+                        </div>
+                        <div>
+                            <h2>Second dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="gil_DailySecond"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="gil_VacCumuSecond"></h1> 
+                        </div>
+                        <div>
+                            <h2>Third dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="gil_DailyThird"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="gil_VacCumuThird"></h1> 
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div id="gilPlot_div">
+                        <canvas class="all_plots" id="gil_plot"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tabcontent" id="Mole Valley">
+            <div class="VacContent_tabInsert">
+                <div>
+                    <h2>Mole Valley</h2>
+                    <h3>Latest Vaccinations</h3>
+                    <h1>People Vaccinated</h1>
+                    <h3 id="mv_VacUpdateDate"></h3>
+                    <div class="Vac_Numerics">
+                        <div>
+                            <h2>First dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="mv_DailyFirst"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="mv_VacCumuFirst"></h1> 
+                        </div>
+                        <div>
+                            <h2>Second dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="mv_DailySecond"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="mv_VacCumuSecond"></h1> 
+                        </div>
+                        <div>
+                            <h2>Third dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="mv_DailyThird"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="mv_VacCumuThird"></h1> 
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div id="mvPlot_div">
+                        <canvas class="all_plots" id="mv_plot"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tabcontent" id="Reigate & Banstead">
+            <div class="VacContent_tabInsert">
+                <div>
+                    <h2>Reigate & Banstead</h2>
+                    <h3>Latest Vaccinations</h3>
+                    <h1>People Vaccinated</h1>
+                    <h3 id="RnB_VacUpdateDate"></h3>
+                    <div class="Vac_Numerics">
+                        <div>
+                            <h2>First dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="RnB_DailyFirst"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="RnB_VacCumuFirst"></h1> 
+                        </div>
+                        <div>
+                            <h2>Second dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="RnB_DailySecond"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="RnB_VacCumuSecond"></h1> 
+                        </div>
+                        <div>
+                            <h2>Third dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="RnB_DailyThird"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="RnB_VacCumuThird"></h1> 
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div id="RnBPlot_div">
+                        <canvas class="all_plots" id="RnB_plot"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tabcontent" id="Runnymede">
+            <div class="VacContent_tabInsert">
+                <div>
+                    <h2>Runnymede</h2>
+                    <h3>Latest Vaccinations</h3>
+                    <h1>People Vaccinated</h1>
+                    <h3 id="runny_VacUpdateDate"></h3>
+                    <div class="Vac_Numerics">
+                        <div>
+                            <h2>First dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="runny_DailyFirst"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="runny_VacCumuFirst"></h1> 
+                        </div>
+                        <div>
+                            <h2>Second dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="runny_DailySecond"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="runny_VacCumuSecond"></h1> 
+                        </div>
+                        <div>
+                            <h2>Third dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="runny_DailyThird"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="runny_VacCumuThird"></h1> 
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div id="runnyPlot_div">
+                        <canvas class="all_plots" id="runny_plot"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tabcontent" id="Spelthorne">
+            <div class="VacContent_tabInsert">
+                <div>
+                    <h2>Spelthorne</h2>
+                    <h3>Latest Vaccinations</h3>
+                    <h1>People Vaccinated</h1>
+                    <h3 id="spel_VacUpdateDate"></h3>
+                    <div class="Vac_Numerics">
+                        <div>
+                            <h2>First dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="spel_DailyFirst"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="spel_VacCumuFirst"></h1> 
+                        </div>
+                        <div>
+                            <h2>Second dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="spel_DailySecond"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="spel_VacCumuSecond"></h1> 
+                        </div>
+                        <div>
+                            <h2>Third dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="spel_DailyThird"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="spel_VacCumuThird"></h1> 
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div id="spelPlot_div">
+                        <canvas class="all_plots" id="spel_plot"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tabcontent" id="Surrey Heath">
+            <div class="VacContent_tabInsert">
+                <div>
+                    <h2>Surrey Heath</h2>
+                    <h3>Latest Vaccinations</h3>
+                    <h1>People Vaccinated</h1>
+                    <h3 id="SuHe_VacUpdateDate"></h3>
+                    <div class="Vac_Numerics">
+                        <div>
+                            <h2>First dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="SuHe_DailyFirst"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="SuHe_VacCumuFirst"></h1> 
+                        </div>
+                        <div>
+                            <h2>Second dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="SuHe_DailySecond"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="SuHe_VacCumuSecond"></h1> 
+                        </div>
+                        <div>
+                            <h2>Third dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="SuHe_DailyThird"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="SuHe_VacCumuThird"></h1> 
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div id="SuHePlot_div">
+                        <canvas class="all_plots" id="SuHe_plot"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tabcontent" id="Tandridge">
+            <div class="VacContent_tabInsert">
+                <div>
+                    <h2>Tandridge</h2>
+                    <h3>Latest Vaccinations</h3>
+                    <h1>People Vaccinated</h1>
+                    <h3 id="tandr_VacUpdateDate"></h3>
+                    <div class="Vac_Numerics">
+                        <div>
+                            <h2>First dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="tandr_DailyFirst"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="tandr_VacCumuFirst"></h1> 
+                        </div>
+                        <div>
+                            <h2>Second dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="tandr_DailySecond"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="tandr_VacCumuSecond"></h1> 
+                        </div>
+                        <div>
+                            <h2>Third dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="tandr_DailyThird"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="tandr_VacCumuThird"></h1> 
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div id="tandrPlot_div">
+                        <canvas class="all_plots" id="tandr_plot"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tabcontent" id="Waverley">
+            <div class="VacContent_tabInsert">
+                <div>
+                    <h2>Waverley</h2>
+                    <h3>Latest Vaccinations</h3>
+                    <h1>People Vaccinated</h1>
+                    <h3 id="wav_VacUpdateDate"></h3>
+                    <div class="Vac_Numerics">
+                        <div>
+                            <h2>First dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="wav_DailyFirst"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="wav_VacCumuFirst"></h1> 
+                        </div>
+                        <div>
+                            <h2>Second dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="wav_DailySecond"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="wav_VacCumuSecond"></h1> 
+                        </div>
+                        <div>
+                            <h2>Third dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="wav_DailyThird"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="wav_VacCumuThird"></h1> 
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div id="wavPlot_div">
+                        <canvas class="all_plots" id="wav_plot"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tabcontent" id="Woking">
+            <div class="VacContent_tabInsert">
+                <div>
+                    <h2>Woking</h2>
+                    <h3>Latest Vaccinations</h3>
+                    <h1>People Vaccinated</h1>
+                    <h3 id="wok_VacUpdateDate"></h3>
+                    <div class="Vac_Numerics">
+                        <div>
+                            <h2>First dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="wok_DailyFirst"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="wok_VacCumuFirst"></h1> 
+                        </div>
+                        <div>
+                            <h2>Second dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="wok_DailySecond"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="wok_VacCumuSecond"></h1> 
+                        </div>
+                        <div>
+                            <h2>Third dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="wok_DailyThird"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="wok_VacCumuThird"></h1> 
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div id="wokPlot_div">
+                        <canvas class="all_plots" id="wok_plot"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <footer>
+        <script src="../externalLib/htmlFunctions.js"></script>
+    </footer>
+</html>

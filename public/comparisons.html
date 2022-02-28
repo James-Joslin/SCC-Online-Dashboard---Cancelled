@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>
+            Dash:PHIIT
+        </title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.0/Chart.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.7"></script>
+        <link rel="stylesheet" type="text/css" href= "./styles.css" />
+    </head>
+    <body>
+        <header>
+            <h1 class = "logo">Dash:PHIIT</h1>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">  
+            <nav>
+                <ul>
+                    <li> <a href="./index.html">Intro</a></li>
+                    <details>
+                        <summary>Surrey Core</summary>
+                        <li><a class="subMenu" href="./SurreyCore/SC_Summary.html">Daily summary</a></li>
+                        <li><a class="subMenu" href="./SurreyCore/SC_VaccinesDetailed.html">Vaccines</a></li>
+                        <li><a class="subMenu" href="./SurreyCore/SC_CasesDetailed.html">Case rates</a></li>
+                        <li><a class="subMenu" href="./SurreyCore/SC_DeathsDetailed.html">Deaths</a></li>
+                        <li><a class="subMenu" href="./SurreyCore/SC_HospDetailed.html">Hospitalisations</a></li>
+                        <li><a class="subMenu" href="./SurreyCore/SC_VentiDetailed.html">Ventilators</a></li>
+                    </details>
+                    <li> <a href="./comparisons.html">LTLA Comparisons</a></li>
+                </ul>
+            </nav>
+            <label for="nav-toggle" class="nav-toggle-label">
+                <span></span>
+            </label>
+        </header>
+        <div class = "Comparisons_Wrapper">
+            <input type="date" class="DateSelector" id = "DateSelector">
+            <div class="Comparisons_Content">
+                <div>
+                    <h2>National vs. Surrey LTLA Rates:</h2>
+                    <h3 id="updateCurrent"></h3>
+                    <h3 id="getSelectedDate"></h3>
+                    <table class="surreyTable">
+                        <thead class="surreyHead">
+                            <tr>
+                                <th>LTLA</th>
+                                <th>Rate</th>
+                                <th>Rank</th>
+                            </tr>
+                        </thead>
+                        <tbody id="surreyData"></tbody>
+                    </table>
+                </div>
+                <div>
+                    <canvas class="all_plots" id="comp_plot"></canvas>
+                </div>
+            </div>
+        </div>
+    </body>
+    <footer>
+        <script src="externalLib/htmlFunctions.js"></script>
+    </footer>
+</html>

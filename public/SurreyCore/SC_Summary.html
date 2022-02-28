@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>
+            Dash:PHITT
+        </title>
+        <!-- Get previous date for rates and deaths update data -->
+        <script>
+            const days = [
+                'Sunday', 'Monday', 'Tueday',
+                'Wednesday', 'Thurs', 'Friday',
+                'Saturday'];
+            const months = [
+                'January', 'February', 'March', 'April',
+                'May', 'June', 'July', 'August', 'September',
+                'October','November','December'
+            ];
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1)
+            var previous_date = yesterday.toDateString();
+            const previous_dateStringRD = `Most recent update: ${previous_date}`;
+        </script>
+        <!-- Get previous date for rates and deaths update data end -->
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+        <link rel="stylesheet" type="text/css" href= "../styles.css" />
+    </head>
+    <body>
+        <header class="header">
+            <h1 class = "logo">Dash:PHIIT</h1>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">  
+            <nav>
+                <ul>
+                    <li> <a href="../index.html">Intro</a></li>
+                    <details>
+                        <summary>Surrey Core</summary>
+                        <li><a class="subMenu" href="./SC_Summary.html">Daily summary</a></li>
+                        <li><a class="subMenu" href="./SC_VaccinesDetailed.html">Vaccines</a></li>
+                        <li><a class="subMenu" href="./SC_CasesDetailed.html">Case rates</a></li>
+                        <li><a class="subMenu" href="./SC_DeathsDetailed.html">Deaths</a></li>
+                        <li><a class="subMenu" href="./SC_HospDetailed.html">Hospitalisations</a></li>
+                        <li><a class="subMenu" href="./SC_VentiDetailed.html">Ventilators</a></li>
+                    </details>
+                    <li> <a href="../comparisons.html">LTLA Comparisons</a></li>
+                </ul>
+            </nav>
+            <label for="nav-toggle" class="nav-toggle-label">
+                <span></span>
+            </label>
+        </header>
+        <div class="SurreyCore_Wrapper">
+            <div class="VacContent">
+                <div class="Vac_Stats">
+                    <div Class = "VacTitle" id="VacTitle">
+                        <h2>Latest Vaccinations</h2>
+                        <h1>People Vaccinated</h1>
+                        <h3 id="VacUpdateDate"></h3>
+                    </div>
+                    <div class="Vac_Numerics">
+                        <div>
+                            <h2>First dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="DailyFirst"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="VacCumuFirst"></h1> 
+                        </div>
+                        <div>
+                            <h2>Second dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="DailySecond"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="VacCumuSecond"></h1> 
+                        </div>
+                        <div>
+                            <h2>Third dose</h2>
+                            <h3>Daily Count:</h3>
+                            <h1 id="DailyThird"></h1>
+                            <h3>Cumulative Total:</h3>
+                            <h1 id="VacCumuThird"></h1> 
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <canvas class="all_plots" id="vac_plot"></canvas>
+                    </div>
+                    <a href="./SC_VaccinesDetailed.html" class="button">See complete dataset</a>
+                </div>
+            </div>
+            <div class="CaseContent">
+                <h2>Case rates since 1 June 2021</h2>
+                <h1>Positive tests per 100,000 people</h1>
+                <h3 id="InsertDateUpdate"></h3>
+                <h2>
+                    Latest daily Rate: 
+                    <h1 id="InsertDailyCases"></h1>
+                </h2>
+                <h2>
+                    Seven day average (Difference to prior seven days):
+                    <h1 id="InsertWeeklyMeanRates"></h1>
+                    <h3 id="InsertRatesWeek"></h3>
+                </h2>
+                <div>
+                    <canvas class="all_plots" id="rate_plot"></canvas>
+                </div>
+                <a href="./SC_CasesDetailed.html" class="button">
+                    <span class="button__text">See complete dataset</span>
+                </a>
+            </div>
+            <div class="DeathContent">
+                <h2>Deaths since 1 June 2021</h2>
+                <h1>New deaths per day, 28 days after positive test</h1>
+                <h3 id="InsertDeathsDateUpdate"></h3>
+                <h2>
+                    Deaths in the past 24 hours: 
+                    <h1 id="InsertDailyDeaths"></h1>
+                </h2>
+                <h2>
+                    Seven day sum (Difference to prior seven days):
+                    <h1 id="InsertWeeklySumDeaths"></h1>
+                    <h3 id="InsertDeathsWeek"></h3>
+                </h2>
+                <div>
+                    <canvas class="all_plots" id="deaths_plot"></canvas>
+                </div>
+                <a href="./SC_DeathsDetailed.html" class="button">See complete dataset</a>
+            </div>
+            <div class="HospContent">
+                <h2>Hospital Admissions since 1 June 2021</h2>
+                <h1>New Admissions related to Covid-19 per day</h1>
+                <h3 id="InsertHospUpdateDate"></h3>
+                <h2>
+                    Latest known admissions:
+                    <h1 id="InsertLatestHospAd"></h1>
+                </h2>
+                <h2>
+                    Seven day sum (Difference to prior seven days):
+                    <h1 id="InsertWeeklyHosp"></h1>
+                    <h3 id="InsertHospsWeek"></h3>
+                </h2>
+                <div>
+                    <canvas class="all_plots" id="hosps_plot"></canvas>
+                </div>
+                <a href="./SC_HospDetailed.html" class="button">See complete dataset</a>
+            </div>
+            <div class="VentContent">
+                <h2>Ventilators since 1 June 2021</h2>
+                <h1>Ventilators in use</h1>
+                <h3 id="InsertVentiUpdateDate"></h3>
+                <h2>
+                    Latest Number of Ventilators:
+                    <h1 id="InsertLatestVenti"></h1>
+                </h2>
+                <h2>
+                    Seven day sum (Difference to prior seven days):
+                    <h1 id="InsertVentiSum"></h1>
+                    <h3 id="InsertVentiWeek"></h3>
+                </h2>
+                <div>
+                    <canvas class="all_plots" id="venti_plot"></canvas>
+                </div>
+                <a href="./SC_VentiDetailed.html" class="button">See complete dataset</a>  
+            </div>
+        </div>
+        <footer>
+            <script src="../externalLib/htmlFunctions.js"></script>
+        </footer>
+    </body>
+</html>
